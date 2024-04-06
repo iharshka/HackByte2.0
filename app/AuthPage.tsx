@@ -33,7 +33,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded focus:outline-none"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-1 px-4 rounded focus:outline-none"
         >
           Chat
         </button>
