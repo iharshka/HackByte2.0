@@ -1,24 +1,15 @@
 import "dotenv/config";
 import express from "express";
-<<<<<<< HEAD
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import axios from "axios";
-=======
-import bcrypt from "bcrypt";
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
 import cors from "cors";
 import pg from "pg";
 
 const app = express();
-<<<<<<< HEAD
 app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-=======
-app.use(cors());
-app.use(express.json());
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
 const port = 5173;
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
@@ -43,10 +34,7 @@ const mentorRegister = async (
     "INSERT INTO mentor_data(mentor_name, mentor_email, mentor_password, profession) VALUES($1, $2, $3, $4)",
     [mentorName, mentorEmail, hash, profession]
   );
-<<<<<<< HEAD
   res.send("Registered as a mentor");
-=======
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
 };
 
 const register = async (userName, emailId, password) => {
@@ -55,10 +43,7 @@ const register = async (userName, emailId, password) => {
     "INSERT INTO user_data(user_name, email_id, password) VALUES($1, $2, $3)",
     [userName, emailId, hash]
   );
-<<<<<<< HEAD
   res.send("Registered as a User!");
-=======
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
 };
 
 const mentorLogin = (mentorEmail, mentorPassword) => {
@@ -111,7 +96,6 @@ const login = (emailId, password) => {
   });
 };
 
-<<<<<<< HEAD
 app.post("/register/:kind", async (req, res) => {
   const kind = req.params.kind;
   if (kind == "mentor") {
@@ -123,29 +107,13 @@ app.post("/register/:kind", async (req, res) => {
     );
   } else if (kind == "user")
     register(req.body.userName, req.body.emailId, req.body.password);
-=======
-app.get("/", async (req, res) => {
-  res.send("Hack IT!");
-});
-
-app.post("/register/:kind", async (req, res) => {
-  const kind = req.params.kind;
-  if (kind === "mentor") {
-    mentorRegister("Mohan", "mohan@doc.com", "doc4life", "Conusellor");
-  } else register("rat", "rodent@rat.com", "cheese");
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
   res.send("Registered");
 });
 
 app.post("/login/:kind", async (req, res) => {
   const kind = req.params.kind;
-<<<<<<< HEAD
   if (kind == "mentor") {
     mentorLogin(req.body.mentorEmail, req.body.mentorPassword) //"doc4life"
-=======
-  if (kind === "mentor") {
-    mentorLogin("mohan@doc.com", "doc4life")
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
       .then((isLoggedIn) => {
         if (isLoggedIn) {
           res.send("mValid");
@@ -157,13 +125,8 @@ app.post("/login/:kind", async (req, res) => {
         res.status(404);
         console.error(error);
       });
-<<<<<<< HEAD
   } else if (kind == "user") {
     login(req.body.emailId, req.body.password) // cheese
-=======
-  } else if (kind === "user") {
-    login("rodent@rat.com", "chese")
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
       .then((isLoggedIn) => {
         if (isLoggedIn) {
           res.send("Valid");
@@ -182,10 +145,6 @@ app.get("/confessions", async (req, res) => {
   await db.query("SELECT confession FROM confessions", (err, response) => {
     if (err) console.error("Error getting Confessions", err.stack);
     else {
-<<<<<<< HEAD
-=======
-      console.log(response.rows);
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
       res.send(response.rows);
     }
   });
@@ -193,7 +152,6 @@ app.get("/confessions", async (req, res) => {
 
 app.post("/confess", async (req, res) => {
   await db.query("INSERT INTO confessions (confession) VALUES($1)", [
-<<<<<<< HEAD
     req.body.confess,
   ]);
   res.send("Confession Submitted Successfully!");
@@ -211,10 +169,6 @@ app.post("/auth", async (req, res) => {
   } catch (error) {
     return res.status(error.response.status).json(error.response.data);
   }
-=======
-    "I'm Gay!",
-  ]);
->>>>>>> 9e8fd1ff27f95c84d77df551be173f8847cac172
 });
 
 app.listen(port, () => {
