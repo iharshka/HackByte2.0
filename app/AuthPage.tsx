@@ -9,14 +9,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const username = e.currentTarget.username.value;
-
     try {
-      const response = await axios.post("https://localhost:5173/auth", {
+      const response = await axios.post("http://localhost:5173/auth", {
         username,
       });
       const userData = { ...response.data, secret: username };
       onAuth(userData);
-    } catch (error) {
+    } catch (error) { 
       console.error("Error", error);
     }
   };

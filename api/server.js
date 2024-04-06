@@ -23,6 +23,24 @@ const db = new pg.Client({
 });
 db.connect();
 
+const createConfessTable = async () => {
+  await db.query(
+    "CREATE TABLE IF NOT EXISTS confessions(id serial primary key,confession text NOT NULL);"
+  );
+};
+
+const createUserTable = async () => {
+  await db.query(
+    "CREATE TABLE IF NOT EXISTS user_data(id serial primary key,user_name text NOT NULL,email_id text NOT NULL,password text NOT NULL);"
+  );
+};
+
+const createMentorTable = async () => {
+  await db.query(
+    "CREATE TABLE IF NOT EXISTS mentor_data(id serial primary key,mentor_name text NOT NULL,mentor_email text NOT NULL,mentor_password text NOT NULL,profession text NOT NULL);"
+  );
+};
+
 const mentorRegister = async (
   mentorName,
   mentorEmail,
@@ -34,7 +52,6 @@ const mentorRegister = async (
     "INSERT INTO mentor_data(mentor_name, mentor_email, mentor_password, profession) VALUES($1, $2, $3, $4)",
     [mentorName, mentorEmail, hash, profession]
   );
-  res.send("Registered as a mentor");
 };
 
 const register = async (userName, emailId, password) => {
@@ -43,7 +60,6 @@ const register = async (userName, emailId, password) => {
     "INSERT INTO user_data(user_name, email_id, password) VALUES($1, $2, $3)",
     [userName, emailId, hash]
   );
-  res.send("Registered as a User!");
 };
 
 const mentorLogin = (mentorEmail, mentorPassword) => {
@@ -172,5 +188,8 @@ app.post("/auth", async (req, res) => {
 });
 
 app.listen(port, () => {
+  createUserTable();
+  createMentorTable();
+  createConfessTable();
   console.log(`Server is running on port ${port}`);
 });
