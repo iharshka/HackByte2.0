@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "favicon.ico";
 import axios from "axios";
+import CommunityChat from "./CommunityChat";
 
 const SignUpForm = () => {
   const [userFormVisible, setUserFormVisible] = useState(false);
@@ -342,6 +343,7 @@ const SignUpForm = () => {
           </p>
         </form>
       )}
+      <CommunityChat/>
     </div>
   );
 };
