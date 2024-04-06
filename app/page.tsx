@@ -3,8 +3,6 @@
 import React, { useState } from "react";
 import Image from "favicon.ico";
 import axios from "axios";
-import CommunityChat from "./CommunityChat";
-import NavBar from "./dashboard/page";
 
 const SignUpForm = () => {
   const [userForm, setUserForm] = useState(true);
@@ -25,14 +23,27 @@ const SignUpForm = () => {
     "Occupational Therapists",
   ]; // Dummy professions
 
-  const handleUserSubmit = () => {
+  const handleSubmit = () => {
+    if (userLoginFormVisible || mentorLoginFormVisible) {
+      if (userForm) handleUserLogin();
+      else handleMentorLogin();
+    } else {
+      if (userForm) handleUserSignIn();
+      else handleMentorSignIn();
+    }
+  };
+
+  const handleUserSignIn = async () => {
     // Call User Signup API
-    axios
-      .post("/api/user/signup", { email, username, password })
+    await axios
+      .post("http://localhost:5173/register/" + "user", {
+        emailId: email,
+        userName: username,
+        password: password,
+      })
       .then((response) => {
         console.log("User Signed Up:", response.data);
-        <NavBar />;
-        // Add any further logic for successful signup
+        window.location.href = "/dashboard";
       })
       .catch((error) => {
         console.error("Error signing up user:", error);
@@ -40,19 +51,18 @@ const SignUpForm = () => {
       });
   };
 
-  const handleMentorSubmit = () => {
-    // Call Mentor Signup API
-    axios
-      .post("/api/mentor/signup", {
-        email,
-        username,
-        password,
-        selectedProfession,
+  const handleMentorSignIn = async () => {
+    await axios
+      .post("http://localhost:5173/register/mentor", {
+        mentorEmail: email,
+        mentorName: username,
+        mentorPassword: password,
+        profession: selectedProfession,
       })
       .then((response) => {
         console.log("Mentor Signed Up:", response.data);
+        window.location.href = "/dashboard";
         // Add any further logic for successful signup
-        <NavBar />;
       })
       .catch((error) => {
         console.error("Error signing up mentor:", error);
@@ -60,14 +70,38 @@ const SignUpForm = () => {
       });
   };
 
-  const handleLogin = () => {
-    // Handle login logic here
-    // Send a GET request using APIs
-    // Placeholder for now
-    console.log("Username:", username);
-    console.log("Password:", password);
-    // On successful API calls and status code 200
-    <NavBar />;
+  const handleUserLogin = async () => {
+    await axios
+      .post("http://localhost:5173/login/user", {
+        emailId: email,
+        password: password,
+      })
+      .then((response) => {
+        console.log("User Login:", response.data);
+        // Add any further logic for successful signup
+        window.location.href = "/dashboard";
+      })
+      .catch((error) => {
+        console.error("Error logining in user:", error);
+        // Add error handling logic
+      });
+  };
+
+  const handleMentorLogin = async () => {
+    await axios
+      .post("http://localhost:5173/login/mentor", {
+        mentorEmail: email,
+        mentorPassword: password,
+      })
+      .then((response) => {
+        console.log("Mentor Login:", response.data);
+        // Add any further logic for successful signup
+        window.location.href = "/dashboard";
+      })
+      .catch((error) => {
+        console.error("Error logining in mentor:", error);
+        // Add error handling logic
+      });
   };
 
   // color for bottom hyper links for login and signup
@@ -100,28 +134,32 @@ const SignUpForm = () => {
         </h1>
       </div>
 
-      {userFormVisible && (
-        <form
-          className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4"
-          onSubmit={handleUserSubmit}
-        >
-          <div className="mb-4">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+      <form
+        className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4"
+        onSubmit={handleSubmit}
+        method="POST"
+      >
+        <div className="mb-4">
+          <label
+            className="block text-white text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            name="emailId"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        {userLoginFormVisible || mentorLoginFormVisible ? (
+          ""
+        ) : (
           <div className="mb-4">
             <label
               className="block text-white text-sm font-bold mb-2"
@@ -140,104 +178,28 @@ const SignUpForm = () => {
               required
             />
           </div>
-          <div className="mb-6">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign Up User
-            </button>
-          </div>
-          <p className="text-white mt-4">
-            Already Signed up?{" "}
-            <a
-              href="#"
-              style={bottomlinkcolor}
-              onClick={() => {
-                setLoginFormVisible(true);
-                setUserFormVisible(false);
-                setMentorFormVisible(false);
-              }}
-            >
-              Login here
-            </a>
-          </p>
-        </form>
-      )}
-
-      {mentorFormVisible && (
-        <form
-          className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4"
-          onSubmit={handleMentorSubmit}
-        >
-          <div className="mb-4">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="username"
-            >
-              Username
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+        )}
+        <div className="mb-6">
+          <label
+            className="block text-white text-sm font-bold mb-2"
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {userLoginFormVisible || mentorLoginFormVisible ? (
+          ""
+        ) : mentorForm === true ? (
           <div className="mb-6">
             <label
               className="block text-white text-sm font-bold mb-2"
@@ -263,94 +225,55 @@ const SignUpForm = () => {
               ))}
             </select>
           </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign Up Mentor
-            </button>
-          </div>
-          <p className="text-white mt-4">
-            Already Signed up?{" "}
-            <a
-              href="#"
-              style={bottomlinkcolor}
-              onClick={() => {
-                setLoginFormVisible(true);
-                setUserFormVisible(false);
-                setMentorFormVisible(false);
-              }}
-            >
-              Login here
-            </a>
-          </p>
-        </form>
-      )}
-      {loginFormVisible && (
-        <form
-          className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4 relative"
-          onSubmit={handleLogin}
-        >
-          {/* Login Form Inputs */}
-          <div className="mb-4">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="username"
-            >
-              Username
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-white text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign In
-            </button>
-          </div>
+        ) : (
+          ""
+        )}
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            {userLoginFormVisible || mentorLoginFormVisible
+              ? userForm
+                ? "Login as User"
+                : "Login as Mentor"
+              : userForm === true
+              ? "User Sign In"
+              : "Mentor Sign In"}
+          </button>
+        </div>
+        {userLoginFormVisible || mentorLoginFormVisible ? (
           <p className="text-white mt-4">
             Not registered yet?{" "}
             <a
               href="#"
               style={bottomlinkcolor}
               onClick={() => {
-                setLoginFormVisible(false);
-                setUserFormVisible(true);
-                setMentorFormVisible(false);
+                setUserLoginFormVisible(false);
+                // setUserFormVisible(true);
+                // setMentorFormVisible(false);
               }}
             >
               Signup here
             </a>
           </p>
-        </form>
-      )}
+        ) : (
+          <p className="text-white mt-4">
+            Already Signed up?{" "}
+            <a
+              href="#"
+              style={bottomlinkcolor}
+              onClick={() => {
+                setUserLoginFormVisible(true);
+                // setUserFormVisible(false);
+                // setMentorFormVisible(false);
+              }}
+            >
+              Login here
+            </a>
+          </p>
+        )}
+      </form>
     </div>
   );
 };
