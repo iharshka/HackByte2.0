@@ -23,10 +23,10 @@ const SignUpForm = () => {
     "Occupational Therapists",
   ]; // Dummy professions
 
-  const handleUserSubmit = () => {
+  const handleUserSubmit = async () => {
     // Call User Signup API
-    axios
-      .post("/api/user/signup", { email, username, password })
+    await axios
+      .post("https://localhost:5173/register/" + "user", { emailId: email, userName: username, password: password })
       .then((response) => {
         console.log("User Signed Up:", response.data);
         // Add any further logic for successful signup
@@ -37,14 +37,14 @@ const SignUpForm = () => {
       });
   };
 
-  const handleMentorSubmit = () => {
-    // Call Mentor Signup API
-    axios
-      .post("/api/mentor/signup", {
-        email,
-        username,
-        password,
-        selectedProfession,
+  const handleMentorSubmit = async () => {
+    console.log("Submit");
+    await axios
+      .post("https://localhost:5173/register/" + "mentor", {
+        mentorEmail :email,
+        mentorName:username,
+        mentorPassword: password,
+        profession: selectedProfession,
       })
       .then((response) => {
         console.log("Mentor Signed Up:", response.data);
@@ -98,6 +98,7 @@ const SignUpForm = () => {
         <form
           className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4"
           onSubmit={handleUserSubmit}
+          method="POST"
         >
           <div className="mb-4">
             <label
@@ -109,6 +110,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="email"
+              name="emailId"
               type="email"
               placeholder="Email"
               value={email}
@@ -126,6 +128,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="username"
+              name="userName"
               type="text"
               placeholder="Username"
               value={username}
@@ -143,6 +146,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
+              name="password"
               type="password"
               placeholder="Password"
               value={password}
@@ -152,8 +156,8 @@ const SignUpForm = () => {
           </div>
           <div className="flex items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Sign Up User
             </button>
@@ -178,7 +182,7 @@ const SignUpForm = () => {
       {mentorFormVisible && (
         <form
           className="bg-black shadow-md rounded-b-lg px-8 pt-6 pb-8 mb-4"
-          onSubmit={handleMentorSubmit}
+          // onSubmit={handleMentorSubmit}
         >
           <div className="mb-4">
             <label
@@ -190,6 +194,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="email"
+              name="mentorEmail"
               type="email"
               placeholder="Email"
               value={email}
@@ -207,6 +212,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="username"
+              name="mentorName"
               type="text"
               placeholder="Username"
               value={username}
@@ -224,6 +230,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
               id="password"
+              name="mentorPassword"
               type="password"
               placeholder="Password"
               value={password}
@@ -241,6 +248,7 @@ const SignUpForm = () => {
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-grey leading-tight focus:outline-none focus:shadow-outline"
               id="profession"
+              name="profession"
               value={selectedProfession}
               onChange={(e) => setSelectedProfession(e.target.value)}
               required
@@ -258,7 +266,8 @@ const SignUpForm = () => {
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
+              // type="submit"
+              onClick={handleMentorSubmit}
             >
               Sign Up Mentor
             </button>
@@ -296,6 +305,7 @@ const SignUpForm = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
+              name="userName"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -312,6 +322,7 @@ const SignUpForm = () => {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-white mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
+              name="password"
               type="password"
               placeholder="Password"
               value={password}
@@ -324,7 +335,7 @@ const SignUpForm = () => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Sign In
+              Login In
             </button>
           </div>
           <p className="text-white mt-4">
@@ -343,7 +354,6 @@ const SignUpForm = () => {
           </p>
         </form>
       )}
-      <CommunityChat/>
     </div>
   );
 };
