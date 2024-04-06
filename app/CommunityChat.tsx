@@ -13,7 +13,9 @@ function CommunityChat() {
   if (!user) {
     return <AuthPage onAuth={(userData: User) => setUser(userData)} />;
   } else {
-    return <ChatsPage onChat={(user)} username={user.username} secret={user.secet}/>;
+    return (
+      <ChatsPage onChat={user} username={user.username} secret={user.secet} />
+    );
   }
 }
 

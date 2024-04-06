@@ -1,39 +1,43 @@
 import React from "react";
 import axios from "axios";
+
 interface AuthPageProps {
   onAuth: (user: { username: string; secret: string }) => void;
 }
 
 const AuthPage: React.FC<AuthPageProps> = ({ onAuth }) => {
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const usernameInput = e.currentTarget.username as HTMLInputElement;
-        const username = usernameInput.value;
-      
-        axios.post('https://localhost:5173/auth', { username })
-          .then(response => {
-            const userData = { ...response.data, secret: username };
-            onAuth(userData);
-          })
-          .catch((error) => {
-            console.error("Error", error);
-          });
-      };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const username = e.currentTarget.username.value;
+
+    try {
+      const response = await axios.post("https://localhost:5173/auth", {
+        username,
+      });
+      const userData = { ...response.data, secret: username };
+      onAuth(userData);
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
 
   return (
-    <div className="background">
-      <form onSubmit={onSubmit} className="form-card">
-        <div className="form-title">Welcome 👋</div>
-
-        <div className="form-subtitle">Set a username to get started</div>
-
-        <div className="auth">
-          <div className="auth-label">Username</div>
-          <input className="auth-input" name="username" />
-          <button className="auth-button" type="submit">
-            Enter
-          </button>
+    <div className="bg-whit py-8 px-4">
+      <form onSubmit={handleSubmit} className="w-64">
+        <div className="text-gray-600">Choose a username for yourself</div>
+        <div className="flex items-center mb-4">
+          <label className="mr-2 text-gray-600">Username:</label>
+          <input
+            className="rounded px-3 py-2 bg-white-800 text-black border-slate-50"
+            name="username"
+          />
         </div>
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded focus:outline-none"
+        >
+          Chat
+        </button>
       </form>
     </div>
   );

@@ -343,7 +343,6 @@ const SignUpForm = () => {
           </p>
         </form>
       )}
-      <CommunityChat/>
     </div>
   );
 };
