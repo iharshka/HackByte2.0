@@ -1,21 +1,26 @@
+import { PrettyChatWindow } from "react-chat-engine-pretty";
 import React from "react";
-import { MultiChatSocket, MultiChatWindow, useMultiChatLogic } from "react-chat-engine-advanced";
 
-interface ChatPageProps {
-    onChat: (user: { username: string, secret: string }) => void;
-    username: string;
-    secret: string;
+interface ChatsPageProps {
+  username: string;
+  secret: string;
 }
 
-const ChatsPage: React.FC<ChatPageProps> = ({ onChat, username, secret }) => {
-    const chatProps = useMultiChatLogic('ae31c5fa-e598-4468-8e6c-555d52d70ff4', username, secret);
-
-    return (
-        <div style={{ height: '100vh' }}>
-            <MultiChatSocket {...chatProps} />
-            <MultiChatWindow {...chatProps} style={{ height: '100%' }} />
-        </div>
-    );
+const ChatsPage = (props: any) => {
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-4">Community Chats</h1>
+      <p className="text-gray-600">
+        Welcome! You are now in the community chat room.
+      </p>
+      {/* Additional chat functionality can be implemented here */}
+      <PrettyChatWindow
+        projectId="ae31c5fa-e598-4468-8e6c-555d52d70ff4"
+        username={props.user.username}
+        secret={props.user.secret}
+      />
+    </div>
+  );
 };
 
 export default ChatsPage;
