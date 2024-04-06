@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "favicon.ico";
 import axios from "axios";
 import CommunityChat from "./CommunityChat";
+import NavBar from "./dashboard/page";
 
 const SignUpForm = () => {
   const [userFormVisible, setUserFormVisible] = useState(false);
@@ -29,6 +30,7 @@ const SignUpForm = () => {
       .post("/api/user/signup", { email, username, password })
       .then((response) => {
         console.log("User Signed Up:", response.data);
+        <NavBar />;
         // Add any further logic for successful signup
       })
       .catch((error) => {
@@ -49,6 +51,7 @@ const SignUpForm = () => {
       .then((response) => {
         console.log("Mentor Signed Up:", response.data);
         // Add any further logic for successful signup
+        <NavBar />;
       })
       .catch((error) => {
         console.error("Error signing up mentor:", error);
@@ -62,6 +65,8 @@ const SignUpForm = () => {
     // Placeholder for now
     console.log("Username:", username);
     console.log("Password:", password);
+    // On successful API calls and status code 200
+    <NavBar />;
   };
 
   // color for bottom hyper links for login and signup

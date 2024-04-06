@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import CommunityChat from "../CommunityChat";
+import BarChart from "./BarChart";
+import LineChart from "./LineChart";
+import Confessions from "./confession";
 
 const NavBar = () => {
   const [activeSection, setActiveSection] = useState("Dashboard");
@@ -41,7 +44,7 @@ const NavBar = () => {
           {/* Navbar Options */}
           <ul>
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "Dashboard"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -51,7 +54,7 @@ const NavBar = () => {
               Dashboard
             </li>
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "Track & Improve"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -61,7 +64,7 @@ const NavBar = () => {
               Track & Improve
             </li>
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "Confession Room"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -71,7 +74,7 @@ const NavBar = () => {
               Confession Room
             </li>
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "Immediate Help"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -82,7 +85,7 @@ const NavBar = () => {
             </li>
 
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "1v1 Counselling"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -93,7 +96,7 @@ const NavBar = () => {
             </li>
 
             <li
-              className={`cursor-pointer py-2 px-4 ${
+              className={`cursor-pointer py-2 px-4 my-1 ${
                 activeSection === "Community Chat"
                   ? "bg-orange-500 rounded-xl"
                   : "hover:bg-orange-500 hover:rounded-xl"
@@ -149,7 +152,7 @@ const NavBar = () => {
         <div>
           {/* Render content based on activeSection */}
           {activeSection === "Dashboard" && <Dashboard />}
-          {activeSection === "Track & Improve" && <TrackAndImprove />}
+          {activeSection === "Track & Improve" && <TracknImprove />}
           {activeSection === "Confession Room" && <ConfessionRoom />}
           {activeSection === "Immediate Help" && <ImmediateHelp />}
           {activeSection === "1v1 Counselling" && <Onev1chat />}
@@ -175,32 +178,67 @@ const Dashboard = () => {
   );
 };
 
-const TrackAndImprove = () => {
+const TracknImprove = () => {
+  const barChartData = [3, 2, 6, 8, 4, 5];
+  const barChartLabels = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const lineChartData = [5, 8, 17, 27, 4];
+  const lineChartLabels = ["Jan", "Feb", "Mar", "Apr", "May"];
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">
-        Track & Improve Section
+    <div className="bg-white rounded-lg shadow-md p-5 h-full pb-3">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        Improvement Reports
       </h1>
-      <p className="text-gray-600">
-        This section allows you to track your progress and take steps to improve
-        your well-being.
+      <p className="text-gray-600 mb-6">
+        Track your progress and take steps to improve your well-being.
       </p>
-      {/* Additional content specific to Track & Improve can be added here */}
+      <div className="flex flex-wrap justify-between">
+        {/* Bar Chart */}
+        <div className="w-full md:w-1/2 p-1">
+          <h2 className="text-md font-semibold mb-2">
+            Your sleep cycle in the last week
+          </h2>
+          <div className="border rounded-lg overflow-hidden">
+            <BarChart data={barChartData} labels={barChartLabels} />
+          </div>
+        </div>
+
+        {/* Line Chart */}
+        <div className="w-full md:w-1/2 p-1">
+          <h2 className="text-md font-semibold mb-2">
+            Anxiety Attacks in Past 6 months
+          </h2>
+          <div className="border rounded-lg overflow-hidden">
+            <LineChart data={lineChartData} labels={lineChartLabels} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 const ConfessionRoom = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-4">
-        Confession Room Section
-      </h1>
-      <p className="text-gray-600">
-        Share your thoughts and feelings in a safe space within the Confession
-        Room.
-      </p>
-      {/* Additional content specific to Confession Room can be added here */}
+    <div>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          Confession Room Section
+        </h1>
+        <p className="text-gray-600">
+          Share your thoughts and feelings in a safe space within the Confession
+          Room.
+        </p>
+        {/* Additional content specific to Confession Room can be added here */}
+      </div>
+      <Confessions />
     </div>
   );
 };
