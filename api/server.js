@@ -15,11 +15,9 @@ const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localHost",
-  database: "HackByte",
-  password: "Aryan^(",
-  port: "5432",
+  connectionString:
+    "postgres://monkdb_user:dTon7LqXpwrzNZlupckDAFel1j9LFdZ3@dpg-co8qriev3ddc73fmpnug-a.oregon-postgres.render.com/monkdb",
+  ssl: { rejectUnauthorized: false },
 });
 db.connect();
 
